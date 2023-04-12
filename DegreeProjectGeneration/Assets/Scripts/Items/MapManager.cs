@@ -19,8 +19,8 @@ public class MapManager : MonoBehaviour
     public Room[,] MapLayout;
 
     [Header("Room Distances")]
-    [SerializeField]private float columnSpace = 1;
-    [SerializeField] private float rowSpace = 1;
+    //[SerializeField]private float columnSpace = 1;
+    //[SerializeField] private float rowSpace = 1;
     [SerializeField] private float xSpace = 0, ySpace = 0;
     [SerializeField] private float xStart = 0, yStart = 0;
 
@@ -28,26 +28,36 @@ public class MapManager : MonoBehaviour
     {
         if (!isRandom)
             return;
+        WaitForTime(2);
         FillRoomLists();
+        WaitForTime(2);
         CheckRoomList();
         RandomAmountOfRoom(minRoom, maxRoom);
         MapLayout = new Room[amountOfRooms, amountOfRooms];
-        GenerateRoomLayout();
+        GenerateRoomLayout(amountOfRooms / 2,amountOfRooms / 2);
         PutGenerationOnMap();
         
         
     }
 
+    IEnumerable<WaitForSeconds> WaitForTime(float T)
+    {
+        yield return new WaitForSeconds(T);
+
+    }
     private void CheckRoomList()
     {
         int i = 0;
         foreach (var room in Rooms)
         {
             i++;
+            room.SetTheRooms();
             if (room.AmountOfRooms <= 0)
             {
                 Debug.LogError("Room nr " + i + "didnt load correctly");
+                continue;
             }
+            Debug.Log(i+": loaded correctly");
             
         }
     }
@@ -80,17 +90,18 @@ public class MapManager : MonoBehaviour
         amountOfRooms = (int)Random.Range(minRoom, maxRoom);
     }
 
-    private void ConnectDoors(Door first, Door second)
+    private int ConnectDoors(Door first, Door second)
     {
-        if (first.isPaired == false && second.isPaired == false && first.otherDoor == null && second.otherDoor == null)
-        {
-            first.otherDoor = second;
-            second.otherDoor = first;
-            first.isPaired = true;
-            second.isPaired = true;
-            
-        }
+        if (first.isPaired != false || second.isPaired != false || first.otherDoor != null ||
+            second.otherDoor != null) return 0;
         
+        first.otherDoor = second;
+        second.otherDoor = first;
+        first.isPaired = true;
+        second.isPaired = true;
+
+        return 1;
+
     }
 
     Room GetRoomWithDirection(int x, int y, Direction direction)
@@ -100,9 +111,15 @@ public class MapManager : MonoBehaviour
         
         bool succsessnt = true;
         Room tempRoom;
+        int p = 0;
 
         while (succsessnt)
         {
+            p++;
+            if (p == 250)
+            {
+                Debug.LogError("Generation Going for to long");
+            }
             tempRoom = Rooms[Random.Range(0,15)];
             if (MapLayout[x,y+1] != null && direction != Direction.North || MapLayout[x,y-1] != null && direction != Direction.South ||
                 MapLayout[x+1,y] != null && direction != Direction.East || MapLayout[x-1,y] != null && direction != Direction.West)
@@ -117,14 +134,12 @@ public class MapManager : MonoBehaviour
 
         return GetRoomWithDirection(x,y,direction);
     }
-    private void GenerateRoomLayout()
+    
+    private void GenerateRoomLayout(int x, int y)
     {
         int amoutOfUnconectedDoors = 0;
-        int startingPoint = amountOfRooms / 2;
         int LoopTimes = 0;
         bool KeepGenerating = true;
-        int random = Random.Range(0,15);
-        int x = startingPoint, y = startingPoint;
         Room tempRoom;
         
         //TODO Generation 
@@ -134,34 +149,69 @@ public class MapManager : MonoBehaviour
         // move to the next room and repete Check if room is already filled and dont generate new room. 
         //Recursion of this instead
 
-        while (KeepGenerating)
+        if (OutsideArray(y + 1))
+        {
+            Debug.LogError("NUOB");
+            return;
+        }
+        if (OutsideArray(y - 1))
+        {
+            Debug.LogError("SUOB");
+            return;
+        }
+        if (OutsideArray(x + 1))
+        {
+            Debug.LogError("EUOB");
+            return;
+        }
+        if (OutsideArray(x - 1))
+        {
+            Debug.LogError("WUOB");
+            return;
+        }
+        
+        
+        
+        //while (KeepGenerating)
         {
             LoopTimes++;
-            MapLayout[x, y] = Rooms[Random.Range(0,15)];
-
+            if (MapLayout[x, y]==null)
+            {
+                 MapLayout[x, y] = Rooms[Random.Range(0,15)];
+                 amoutOfUnconectedDoors += MapLayout[x, y].AmountOfRooms;
+            }
+           
+            
             // found out what doors are there
+
             if (MapLayout[x,y].hasDirection[(int)Direction.North])
             {
                 //y += 1;
-                if (MapLayout[x,y+1] != null)
+                if (MapLayout[x,y+1] == null)
                 {
                     tempRoom = Rooms[Random.Range(0,15)];
                     if (tempRoom.hasDirection[1])
                     {
                         MapLayout[x, y + 1] = GetRoomWithDirection(x, y + 1, Direction.South);
+                        amoutOfUnconectedDoors += MapLayout[x, y + 1].AmountOfRooms;
+                        amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.North], MapLayout[x,y + 1].DoorS[(int)Direction.South]);
+                        GenerateRoomLayout(x,y + 1);
+                        
                     }
                 }
             }
-            
             if (MapLayout[x,y].hasDirection[(int)Direction.South] )
             {
                 //y += -1;
-                if (MapLayout[x,y-1] != null)
+                if (MapLayout[x,y-1] == null)
                 {
                     tempRoom = Rooms[Random.Range(0,15)];
                     if (tempRoom.hasDirection[0])
                     {
                         MapLayout[x, y-1] = GetRoomWithDirection(x, y-1, Direction.North);
+                        amoutOfUnconectedDoors += MapLayout[x, y - 1].AmountOfRooms;
+                        amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.South], MapLayout[x,y - 1].DoorS[(int)Direction.North]);
+                        GenerateRoomLayout(x,y-1);
                     }
 
                 }
@@ -169,12 +219,15 @@ public class MapManager : MonoBehaviour
             if (MapLayout[x,y].hasDirection[(int)Direction.East])
             {
                 //x += 1;
-                if (MapLayout[x+1,y] != null)
+                if (MapLayout[x+1,y] == null)
                 {
                     tempRoom = Rooms[Random.Range(0,15)];
                     if (tempRoom.hasDirection[3])
                     {
                         MapLayout[x+1, y] = GetRoomWithDirection(x+1,y, Direction.West);
+                        amoutOfUnconectedDoors += MapLayout[x+1, y].AmountOfRooms;
+                        amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.East], MapLayout[x+1,y].DoorS[(int)Direction.West]);
+                        GenerateRoomLayout(x+1,y);
                     }
 
                 }
@@ -182,14 +235,24 @@ public class MapManager : MonoBehaviour
             if (MapLayout[x,y].hasDirection[(int)Direction.West])
             {
                //x += -1;
-               if (MapLayout[x-1,y] != null)
-               { 
+               if (MapLayout[x-1,y] == null)
+               {
                    MapLayout[x-1,y] = GetRoomWithDirection(x-1, y, Direction.East);
+                   amoutOfUnconectedDoors += MapLayout[x - 1, y].AmountOfRooms;
+                   amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.West], MapLayout[x,y + 1].DoorS[(int)Direction.East]);
+                   GenerateRoomLayout(x-1,y);
                }
             }
-                       
 
-            KeepGenerating = false;
+
+            if (amoutOfUnconectedDoors < 0)
+            {
+                Debug.LogError("This isnt supposed to happen, Exit generation loop");
+            }
+            if (amoutOfUnconectedDoors == 0)
+            {
+                KeepGenerating = false;   
+            }
         }
         
         /* make the shaped map*/
@@ -202,6 +265,16 @@ public class MapManager : MonoBehaviour
         
         
         
+    }
+
+    bool OutsideArray(int goingTo)
+    {
+        if (goingTo < 0 || goingTo > amountOfRooms)
+        {
+            return true;
+        }
+
+        return false;
     }
 
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Room : MonoBehaviour
@@ -17,49 +18,63 @@ public class Room : MonoBehaviour
         FindSouthDoor();
         FindEastDoor();
         FindWestDoor();
-        SetTheRooms();
+        SetTheRooms(); 
     }
 
-    private void FindNorthDoor()
+    private void NotAwake()
     {
-        if (transform.Find("doorN") == null) return;
+        FindNorthDoor();
+        FindSouthDoor();
+        FindEastDoor();
+        FindWestDoor();
+    }
+
+
+    private bool FindNorthDoor()
+    {
+        if (transform.Find("doorN") == null) return false;
         hasDirection[0] = true;
         DoorS[0] = transform.Find("doorN").GetComponent<Door>();
+        return true;
     }
-    private void FindSouthDoor()
+    private bool FindSouthDoor()
     {
-        if (transform.Find("doorS") == null) return;
+        if (transform.Find("doorS") == null) return false;
         hasDirection[1] = true;
         DoorS[1] = transform.Find("doorS").GetComponent<Door>();
+        return true;
     }
-    private void FindEastDoor()
+    private bool FindEastDoor()
     {
-        if (transform.Find("doorE") == null) return;
+        if (transform.Find("doorE") == null) return false;
         hasDirection[2] = true;
         DoorS[2] = transform.Find("doorE").GetComponent<Door>();
+        return true;
     }
-    private void FindWestDoor()
+    private bool FindWestDoor()
     {
-        if (transform.Find("doorW") == null) return;
+        if (transform.Find("doorW") == null) return false;
         hasDirection[3] = true;
         DoorS[3] = transform.Find("doorW").GetComponent<Door>();
+        return true;
     }
     
-    void SetTheRooms()
+    public void SetTheRooms()
     {
-        if (hasDirection[0] == true)
+        NotAwake();
+        if (hasDirection[0])
         {
             AmountOfRooms++;
         }
-        if (hasDirection[1] == true)
+        if (hasDirection[1])
         {
             AmountOfRooms++;
         }
-        if (hasDirection[2] == true)
+        if (hasDirection[2])
         {
             AmountOfRooms++;
         }
-        if (hasDirection[3] == true)
+        if (hasDirection[3])
         {
             AmountOfRooms++;
         }
