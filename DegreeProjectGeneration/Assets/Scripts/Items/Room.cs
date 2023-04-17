@@ -14,19 +14,13 @@ public class Room : MonoBehaviour
     
     private void Awake()
     {
-        FindNorthDoor();
-        FindSouthDoor();
-        FindEastDoor();
-        FindWestDoor();
+        
         SetTheRooms(); 
     }
 
     private void NotAwake()
     {
-        FindNorthDoor();
-        FindSouthDoor();
-        FindEastDoor();
-        FindWestDoor();
+        FindNSEWDoor();
     }
 
 
@@ -58,10 +52,58 @@ public class Room : MonoBehaviour
         DoorS[3] = transform.Find("doorW").GetComponent<Door>();
         return true;
     }
+
+    private void FindNSEWDoor()
+    {
+        bool N = true, S = true, E = true, W = true;
+        
+        if (transform.Find("doorN") == null) N = false;
+        if (N)
+        {
+             hasDirection[0] = true;
+             DoorS[0] = transform.Find("doorN").GetComponent<Door>();
+        }
+
+        if (transform.Find("doorS") == null) S=false;
+        if (S)
+        {
+            hasDirection[1] = true;
+            DoorS[1] = transform.Find("doorS").GetComponent<Door>();
+        }
+
+        
+        if (transform.Find("doorE") == null) E = false;
+        if (E)
+        {
+            hasDirection[2] = true;
+            DoorS[2] = transform.Find("doorE").GetComponent<Door>();
+        }
+        
+        if (transform.Find("doorW") == null) W = false;
+        if (W)
+        {
+            hasDirection[3] = true;
+            DoorS[3] = transform.Find("doorW").GetComponent<Door>();
+        }
+        
+        
+        
+    }
+    private void FindDoors()
+    {
+        Door[] doors;
+        doors = transform.GetComponentsInChildren<Door>();
+        foreach (var door in doors)
+        {
+            DoorS[(int)door.direction] = door;
+            hasDirection[(int)door.direction] = true;
+        }
+    }
     
     public void SetTheRooms()
     {
-        NotAwake();
+        FindNSEWDoor();
+
         if (hasDirection[0])
         {
             AmountOfRooms++;

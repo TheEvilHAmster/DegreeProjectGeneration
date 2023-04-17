@@ -168,12 +168,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  amountOfRooms: 6
-  isRandom: 1
+  amountOfRooms: 15
+  isRandom: 0
   minRoom: 4
   maxRoom: 8
-  columnSpace: 1
-  rowSpace: 1
   xSpace: 25
   ySpace: 13
   xStart: 5

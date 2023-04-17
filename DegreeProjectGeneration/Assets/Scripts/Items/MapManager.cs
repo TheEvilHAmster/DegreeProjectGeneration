@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -26,11 +27,11 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        if (!isRandom)
-            return;
-        WaitForTime(2);
+
+        
+        WaitForTime(1);
         FillRoomLists();
-        WaitForTime(2);
+        WaitForTime(1);
         CheckRoomList();
         RandomAmountOfRoom(minRoom, maxRoom);
         MapLayout = new Room[amountOfRooms, amountOfRooms];
@@ -43,6 +44,7 @@ public class MapManager : MonoBehaviour
     IEnumerable<WaitForSeconds> WaitForTime(float T)
     {
         yield return new WaitForSeconds(T);
+        //yield return null;
 
     }
     private void CheckRoomList()
@@ -87,7 +89,11 @@ public class MapManager : MonoBehaviour
 
     private void RandomAmountOfRoom(int minRoom, int maxRoom)
     {
-        amountOfRooms = (int)Random.Range(minRoom, maxRoom);
+        if (isRandom)
+        {
+            amountOfRooms = (int)Random.Range(minRoom, maxRoom);
+        }
+        
     }
 
     private int ConnectDoors(Door first, Door second)
@@ -110,26 +116,36 @@ public class MapManager : MonoBehaviour
         //check the Random rooms direction to be correct
         
         bool succsessnt = true;
-        Room tempRoom;
-        int p = 0;
+        Room[] TempRooms = new Room[8];
+        int i = 0;
 
+        foreach (var room in Rooms)
+        {
+            if (room.hasDirection[(int)direction])
+            {
+                TempRooms[i] = room;
+                i++;
+            }
+        }
+        
         while (succsessnt)
         {
-            p++;
-            if (p == 250)
+
+            if (direction is Direction.East or Direction.West)
             {
-                Debug.LogError("Generation Going for to long");
+                 return Rooms[Random.Range(0,8)];
             }
-            tempRoom = Rooms[Random.Range(0,15)];
+            
+            return Rooms[Random.Range(0, 9)];
+            
+           //Clean this 
+            //Need to look at this if as its supposed to look if there is a room where its not supposed to be a room.
             if (MapLayout[x,y+1] != null && direction != Direction.North || MapLayout[x,y-1] != null && direction != Direction.South ||
                 MapLayout[x+1,y] != null && direction != Direction.East || MapLayout[x-1,y] != null && direction != Direction.West)
             {
                 continue;
             }
-            if (tempRoom.hasDirection[(int)direction])
-            {
-                return tempRoom;
-            }
+
         }
 
         return GetRoomWithDirection(x,y,direction);
