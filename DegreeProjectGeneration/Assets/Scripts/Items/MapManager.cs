@@ -98,6 +98,17 @@ public class MapManager : MonoBehaviour
 
     private int ConnectDoors(Door first, Door second)
     {
+        if (first == null)
+        {
+            Debug.LogError("FirstIsError");
+            return 0;
+        }
+
+        if (second == null)
+        {
+            Debug.LogError("SecondIsError");
+            return 0;
+        }
         if (first.isPaired != false || second.isPaired != false || first.otherDoor != null ||
             second.otherDoor != null) return 0;
         
@@ -255,7 +266,7 @@ public class MapManager : MonoBehaviour
                {
                    MapLayout[x-1,y] = GetRoomWithDirection(x-1, y, Direction.East);
                    amoutOfUnconectedDoors += MapLayout[x - 1, y].AmountOfRooms;
-                   amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.West], MapLayout[x,y + 1].DoorS[(int)Direction.East]);
+                   amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.West], MapLayout[x,y - 1].DoorS[(int)Direction.East]);
                    GenerateRoomLayout(x-1,y);
                }
             }
