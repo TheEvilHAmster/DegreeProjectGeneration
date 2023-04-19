@@ -10,6 +10,7 @@ public class MapManager : MonoBehaviour
 {
     [SerializeField] public Room[] Rooms;
 
+    [SerializeField] private List<Room> resultingRooms = new List<Room>();
 
     [Header("Default")] [SerializeField] private int amountOfRooms = 21;
     [SerializeField] private bool isRandom = true;
@@ -24,6 +25,8 @@ public class MapManager : MonoBehaviour
     //[SerializeField] private float rowSpace = 1;
     [SerializeField] private float xSpace = 0, ySpace = 0;
     [SerializeField] private float xStart = 0, yStart = 0;
+
+   
 
     private void Start()
     {
@@ -73,7 +76,7 @@ public class MapManager : MonoBehaviour
                 if (MapLayout[x,i] != null )
                 {
                      Instantiate(MapLayout[x, i], new Vector3((xStart + (xSpace * x)),
-                         (yStart+(ySpace * i))), quaternion.identity);
+                         (yStart+(ySpace * i))), quaternion.identity, this.transform);
                      Debug.Log("x:"+ x+ " y: "+ i+ " Object: "+ MapLayout[x,i]+ "" );
                 }
 
@@ -125,9 +128,12 @@ public class MapManager : MonoBehaviour
     {
         //todo
         //check the Random rooms direction to be correct
-        
+
+        resultingRooms.Clear();
         List<Room> tempRooms = new List<Room>();
 
+
+        Debug.Log("x: " + x + " y: " +y);
         foreach (var room in Rooms)
         {
             if (room.hasDirection[(int)direction])
@@ -135,6 +141,51 @@ public class MapManager : MonoBehaviour
                 tempRooms.Add(room);
             }
         }
+
+        
+        if (x  <= 1)
+        {
+            foreach (var room in tempRooms)
+            {
+                if (room.hasDirection[(int)Direction.West])
+                {
+                    tempRooms.Remove(room);
+                }
+            }
+        }
+        if (x  > amountOfRooms-2)
+        {
+            foreach (var room in tempRooms)
+            {
+                if (!room.hasDirection[(int)Direction.East])
+                {
+                    tempRooms.Remove(room);
+                }
+            }
+        }
+        if (y  <= 1)
+        {
+            foreach (var room in tempRooms)
+            {
+                if (!room.hasDirection[(int)Direction.South])
+                {
+                    tempRooms.Remove(room);
+                }
+            }
+        }
+        if (y  > amountOfRooms-2)
+        {
+            foreach (var room in tempRooms)
+            {
+                if (!room.hasDirection[(int)Direction.North])
+                {
+                    tempRooms.Remove(room);
+                }
+            }
+        }
+
+        resultingRooms = tempRooms;
+        Debug.Log(tempRooms.Count);
 
         return tempRooms[Random.Range(0, tempRooms.Count)];
         //Clean this 
@@ -174,15 +225,16 @@ public class MapManager : MonoBehaviour
             Debug.LogError("WUOB");
             return;
         }
+
+        Debug.Log("x: "+x+" y: "+y);
         
         if (MapLayout[x, y] == null)
         {
              MapLayout[x, y] = Rooms[Random.Range(0,15)];
              //MapLayout[x, y] = Rooms[7];
              amoutOfUnconectedDoors += MapLayout[x, y].AmountOfRooms;
+
         }
-       
-        
         // found out what doors are there
 
         if (MapLayout[x,y].hasDirection[(int)Direction.North])
@@ -202,6 +254,7 @@ public class MapManager : MonoBehaviour
         if (MapLayout[x,y].hasDirection[(int)Direction.South] )
         {
             //y += -1;
+            
             if (MapLayout[x,y-1] == null)
             {
                 MapLayout[x, y-1] = GetRoomWithDirection(x, y-1, Direction.North);
@@ -267,9 +320,13 @@ public class MapManager : MonoBehaviour
         return false;
     }
 
-
     public void ReGenerate()
     {
+        foreach (var room in transform.GetComponentsInChildren<Room>())
+        {
+            GameObject.Destroy(room.gameObject);
+        }
+
         MapLayout = new Room[amountOfRooms, amountOfRooms];
         GenerateRoomLayout(amountOfRooms / 2,amountOfRooms / 2);
         PutGenerationOnMap();

@@ -344,7 +344,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.21698111, g: 0, b: 0.20232844, a: 1}
+  m_Color: {r: 0.21568628, g: 0, b: 0.20392157, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -468,8 +468,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 0}
-  isPaired: 0
+  otherDoor: {fileID: 7319655909583527066, guid: d1ec8bc0092afd94caa00cf950506642, type: 3}
+  isPaired: 1
   isOpen: 1
   direction: 4
   MapExit: 0
@@ -853,8 +853,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 0}
-  isPaired: 0
+  otherDoor: {fileID: 7695766591204919357, guid: 38e7b3f30502b6640be6f3a7b962f962, type: 3}
+  isPaired: 1
   isOpen: 1
   direction: 3
   MapExit: 0
@@ -1083,8 +1083,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 0}
-  isPaired: 0
+  otherDoor: {fileID: 6720537755239446350, guid: 38e7b3f30502b6640be6f3a7b962f962, type: 3}
+  isPaired: 1
   isOpen: 1
   direction: 2
   MapExit: 0
@@ -1313,8 +1313,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 0}
-  isPaired: 0
+  otherDoor: {fileID: 3002218545332043205, guid: 2b377feb66fb09545a8772d7cdf7f8c7, type: 3}
+  isPaired: 1
   isOpen: 1
   direction: 1
   MapExit: 0
@@ -1593,9 +1593,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9c4362149d6e9649be1a94ce5a2bcd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasDirection: 00000000
+  hasDirection: 01010101
   DoorS:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8781491987281525018}
+  - {fileID: 8347034055338534829}
+  - {fileID: 8356560633488264456}
+  - {fileID: 4622817012654752936}
+  AmountOfRooms: 64

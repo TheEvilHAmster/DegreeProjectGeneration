@@ -52,12 +52,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9c4362149d6e9649be1a94ce5a2bcd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasDirection: 00000000
+  hasDirection: 00010101
   DoorS:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 6938684348141615876}
+  - {fileID: 4158605879816458963}
+  - {fileID: 6363707450575327874}
+  AmountOfRooms: 48
 --- !u!1 &1371830504149963968
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,8 +661,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 0}
-  isPaired: 0
+  otherDoor: {fileID: 6363707450575327874}
+  isPaired: 1
   isOpen: 1
   direction: 3
   MapExit: 0
@@ -743,7 +744,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.21698111, g: 0, b: 0.20232844, a: 1}
+  m_Color: {r: 0.21568628, g: 0, b: 0.20392157, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1133,8 +1134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 0}
-  isPaired: 0
+  otherDoor: {fileID: 4158605879816458963}
+  isPaired: 1
   isOpen: 1
   direction: 4
   MapExit: 0
@@ -1474,8 +1475,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 0}
-  isPaired: 0
+  otherDoor: {fileID: 6063145473933256318, guid: 737702b4a63260843ba914662b49bdf8, type: 3}
+  isPaired: 1
   isOpen: 1
   direction: 2
   MapExit: 0

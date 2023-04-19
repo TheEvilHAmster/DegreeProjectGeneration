@@ -358,8 +358,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 0}
-  isPaired: 0
+  otherDoor: {fileID: 9121179338001809476, guid: 38e7b3f30502b6640be6f3a7b962f962, type: 3}
+  isPaired: 1
   isOpen: 1
   direction: 4
   MapExit: 0
@@ -774,7 +774,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.21698111, g: 0, b: 0.20232844, a: 1}
+  m_Color: {r: 0.21568628, g: 0, b: 0.20392157, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1100,12 +1100,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9c4362149d6e9649be1a94ce5a2bcd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasDirection: 00000000
+  hasDirection: 00000001
   DoorS:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3636714321349883482}
+  AmountOfRooms: 16
 --- !u!1 &9131014441455198624
 GameObject:
   m_ObjectHideFlags: 0
