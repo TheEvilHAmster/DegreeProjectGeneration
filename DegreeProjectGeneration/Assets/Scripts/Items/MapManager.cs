@@ -25,6 +25,8 @@ public class MapManager : MonoBehaviour
     //[SerializeField] private float rowSpace = 1;
     [SerializeField] private float xSpace = 0, ySpace = 0;
     [SerializeField] private float xStart = 0, yStart = 0;
+    
+    private int amoutOfUnconectedDoors = 0;
 
    
 
@@ -130,6 +132,7 @@ public class MapManager : MonoBehaviour
         //check the Random rooms direction to be correct
 
         resultingRooms.Clear();
+        resultingRooms = new List<Room>();
         List<Room> tempRooms = new List<Room>();
 
 
@@ -196,7 +199,26 @@ public class MapManager : MonoBehaviour
     
     private void GenerateRoomLayout(int x, int y)
     {
-        int amoutOfUnconectedDoors = 0;
+
+        if (x > amountOfRooms-2)
+        {
+            x = amountOfRooms-2;
+        }
+
+        if (x <1)
+        {
+            x = 1;
+        }
+        if (y > amountOfRooms-2)
+        {
+            y = amountOfRooms-2;
+        }
+
+        if (y <1)
+        {
+            y = 1;
+        }
+
         
         //TODO Generation 
         // place first room and check how manny doors there are and what direction they are inv
@@ -312,7 +334,7 @@ public class MapManager : MonoBehaviour
 
     bool OutsideArray(int goingTo)
     {
-        if (goingTo < 0 || goingTo > amountOfRooms)
+        if (goingTo < 1 || goingTo > amountOfRooms-2)
         {
             return true;
         }
