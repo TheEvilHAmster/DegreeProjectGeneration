@@ -10,7 +10,9 @@ public class MapManager : MonoBehaviour
 {
     [SerializeField] public Room[] Rooms;
 
+    [SerializeField] private int NumberOfRooms = 0;
     [SerializeField] private List<Room> resultingRooms = new List<Room>();
+    
 
     [Header("Default")] [SerializeField] private int amountOfRooms = 21;
     [SerializeField] private bool isRandom = true;
@@ -27,6 +29,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private float xStart = 0, yStart = 0;
     
     private int amoutOfUnconectedDoors = 0;
+    private int padding = 2;
 
    
 
@@ -91,6 +94,20 @@ public class MapManager : MonoBehaviour
         Rooms = Resources.LoadAll<Room>("Rooms");
     }
 
+    private void PareDoors()
+    {
+        for (int x = 0; x < MapLayout.Length; x++)
+        {
+            for (int y = 0; y < MapLayout.Length; y++)
+            {
+                if (MapLayout[x,y] != null)
+                {
+                    
+                }
+            }
+        }
+            //ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.South], MapLayout[x,y - 1].DoorS[(int)Direction.North]);
+    }
 
     private void RandomAmountOfRoom(int minRoom, int maxRoom)
     {
@@ -145,41 +162,105 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        
-        if (x  <= 1)
+        if (MapLayout[x, y + 1] != null)
         {
-            foreach (var room in tempRooms)
+            if (MapLayout[x, y+1].DoorS[(int)Direction.South])
             {
+                for (var index = 0; index < tempRooms.Count; index++)
+                {
+                    var room = tempRooms[index];
+                    if (!room.hasDirection[(int)Direction.South])
+                    {
+                        tempRooms.Remove(room);
+                    }
+                }
+            }
+        }
+        
+        if (MapLayout[x, y - 1] != null)
+        {
+            if (MapLayout[x, y-1].DoorS[(int)Direction.North])
+            {
+                for (var index = 0; index < tempRooms.Count; index++)
+                {
+                    var room = tempRooms[index];
+                    if (!room.hasDirection[(int)Direction.North])
+                    {
+                        tempRooms.Remove(room);
+                    }
+                }
+            }
+        }
+
+        if (MapLayout[x+1, y] != null)
+        {
+            if (MapLayout[x+1, y].DoorS[(int)Direction.West])
+            {
+                for (var index = 0; index < tempRooms.Count; index++)
+                {
+                    var room = tempRooms[index];
+                    if (!room.hasDirection[(int)Direction.West])
+                    {
+                        tempRooms.Remove(room);
+                    }
+                }
+            }
+        }
+
+        if (MapLayout[x-1,y] != null)
+        {
+            if ( MapLayout[x-1,y].DoorS[(int)Direction.East])
+            {
+                for (var index = 0; index < tempRooms.Count; index++)
+                {
+                    var room = tempRooms[index];
+                    if (!room.hasDirection[(int)Direction.East])
+                    {
+                        tempRooms.Remove(room);
+                    }
+                }
+            }
+        }
+
+        
+        if (x  < padding)
+        {
+            for (var index = 0; index < tempRooms.Count; index++)
+            {
+                var room = tempRooms[index];
                 if (room.hasDirection[(int)Direction.West])
                 {
                     tempRooms.Remove(room);
                 }
             }
         }
-        if (x  > amountOfRooms-2)
+        if (x  > amountOfRooms-padding)
         {
-            foreach (var room in tempRooms)
+            for (var index = 0; index < tempRooms.Count; index++)
             {
+                var room = tempRooms[index];
                 if (!room.hasDirection[(int)Direction.East])
                 {
                     tempRooms.Remove(room);
                 }
             }
         }
-        if (y  <= 1)
+        if (y  < padding)
         {
-            foreach (var room in tempRooms)
+            for (var index = 0; index < tempRooms.Count; index++)
             {
+                var room = tempRooms[index];
                 if (!room.hasDirection[(int)Direction.South])
                 {
                     tempRooms.Remove(room);
                 }
             }
         }
-        if (y  > amountOfRooms-2)
+        if (y  > amountOfRooms-padding)
         {
-            foreach (var room in tempRooms)
+            for (var index = 0; index < tempRooms.Count; index++)
             {
+                var room = tempRooms[index];
                 if (!room.hasDirection[(int)Direction.North])
                 {
                     tempRooms.Remove(room);
@@ -188,7 +269,7 @@ public class MapManager : MonoBehaviour
         }
 
         resultingRooms = tempRooms;
-        Debug.Log(tempRooms.Count);
+        NumberOfRooms = tempRooms.Count;
 
         return tempRooms[Random.Range(0, tempRooms.Count)];
         //Clean this 
@@ -200,23 +281,23 @@ public class MapManager : MonoBehaviour
     private void GenerateRoomLayout(int x, int y)
     {
 
-        if (x > amountOfRooms-2)
+        if (x > amountOfRooms-padding)
         {
-            x = amountOfRooms-2;
+            x = amountOfRooms-padding;
         }
-
-        if (x <1)
+        
+        if (x <padding)
         {
-            x = 1;
+            x = padding;
         }
-        if (y > amountOfRooms-2)
+        if (y > amountOfRooms-padding)
         {
-            y = amountOfRooms-2;
+            y = amountOfRooms-padding;
         }
-
-        if (y <1)
+        
+        if (y <padding)
         {
-            y = 1;
+            y = padding;
         }
 
         
@@ -265,9 +346,8 @@ public class MapManager : MonoBehaviour
             if (MapLayout[x,y+1] == null)
             {
                 MapLayout[x, y + 1] = GetRoomWithDirection(x, y + 1, Direction.South);
-
-                amoutOfUnconectedDoors += MapLayout[x, y + 1].AmountOfRooms;
-                amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.North], MapLayout[x,y + 1].DoorS[(int)Direction.South]);
+                // amoutOfUnconectedDoors += MapLayout[x, y + 1].AmountOfRooms;
+                // amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.North], MapLayout[x,y + 1].DoorS[(int)Direction.South]);
                 GenerateRoomLayout(x,y + 1);
                 
             }
@@ -280,8 +360,8 @@ public class MapManager : MonoBehaviour
             if (MapLayout[x,y-1] == null)
             {
                 MapLayout[x, y-1] = GetRoomWithDirection(x, y-1, Direction.North);
-                amoutOfUnconectedDoors += MapLayout[x, y - 1].AmountOfRooms;
-                amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.South], MapLayout[x,y - 1].DoorS[(int)Direction.North]);
+                // amoutOfUnconectedDoors += MapLayout[x, y - 1].AmountOfRooms;
+                // amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.South], MapLayout[x,y - 1].DoorS[(int)Direction.North]);
                 GenerateRoomLayout(x,y-1);
 
             }
@@ -293,8 +373,8 @@ public class MapManager : MonoBehaviour
             if (MapLayout[x+1,y] == null)
             {
                 MapLayout[x+1, y] = GetRoomWithDirection(x+1,y, Direction.West);
-                amoutOfUnconectedDoors += MapLayout[x+1, y].AmountOfRooms;
-                amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.East], MapLayout[x+1,y].DoorS[(int)Direction.West]);
+                // amoutOfUnconectedDoors += MapLayout[x+1, y].AmountOfRooms;
+                // amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.East], MapLayout[x+1,y].DoorS[(int)Direction.West]);
                 GenerateRoomLayout(x+1,y);
                 
             }
@@ -306,8 +386,8 @@ public class MapManager : MonoBehaviour
            if (MapLayout[x-1,y] == null)
            {
                MapLayout[x-1,y] = GetRoomWithDirection(x-1, y, Direction.East);
-               amoutOfUnconectedDoors += MapLayout[x - 1, y].AmountOfRooms;
-               amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.West], MapLayout[x-1,y].DoorS[(int)Direction.East]);
+               // amoutOfUnconectedDoors += MapLayout[x - 1, y].AmountOfRooms;
+               // amountOfRooms -= ConnectDoors(MapLayout[x,y].DoorS[(int)Direction.West], MapLayout[x-1,y].DoorS[(int)Direction.East]);
                GenerateRoomLayout(x-1,y);
            }
         }
@@ -317,10 +397,7 @@ public class MapManager : MonoBehaviour
             Debug.LogError("This isnt supposed to happen, Exit generation loop");
             return;
         }
-        if (amoutOfUnconectedDoors == 0)
-        {
-            return;
-        }
+
 
         /* make the shaped map*/
         
@@ -346,7 +423,7 @@ public class MapManager : MonoBehaviour
     {
         foreach (var room in transform.GetComponentsInChildren<Room>())
         {
-            GameObject.Destroy(room.gameObject);
+            Destroy(room.gameObject);
         }
 
         MapLayout = new Room[amountOfRooms, amountOfRooms];

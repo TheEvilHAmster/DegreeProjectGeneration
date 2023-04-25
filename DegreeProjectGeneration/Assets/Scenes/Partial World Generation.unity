@@ -168,6 +168,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  resultingRooms: []
   amountOfRooms: 15
   isRandom: 0
   minRoom: 4
