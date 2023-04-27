@@ -358,10 +358,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 9121179338001809476, guid: 38e7b3f30502b6640be6f3a7b962f962, type: 3}
-  isPaired: 1
+  otherDoor: {fileID: 0}
+  isPaired: 0
   isOpen: 1
-  direction: 4
+  direction: 3
   MapExit: 0
 --- !u!1 &2037113783234572575
 GameObject:

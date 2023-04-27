@@ -225,10 +225,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 8356560633488264456, guid: 97212e309cf17c74d971ff7c033fb78e, type: 3}
-  isPaired: 1
+  otherDoor: {fileID: 0}
+  isPaired: 0
   isOpen: 1
-  direction: 4
+  direction: 3
   MapExit: 0
 --- !u!1 &1616780680905307110
 GameObject:
@@ -1245,10 +1245,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 8347034055338534829, guid: 97212e309cf17c74d971ff7c033fb78e, type: 3}
-  isPaired: 1
+  otherDoor: {fileID: 0}
+  isPaired: 0
   isOpen: 1
-  direction: 1
+  direction: 0
   MapExit: 0
 --- !u!1 &7694696915236228591
 GameObject:
@@ -1364,10 +1364,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 3636714321349883482, guid: 6778190672175c8449f6911cbb64dd39, type: 3}
-  isPaired: 1
+  otherDoor: {fileID: 0}
+  isPaired: 0
   isOpen: 1
-  direction: 3
+  direction: 2
   MapExit: 0
 --- !u!1 &7918128254399991066
 GameObject:

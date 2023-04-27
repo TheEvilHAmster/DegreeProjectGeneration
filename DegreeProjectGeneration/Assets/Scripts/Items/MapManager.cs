@@ -29,7 +29,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private float xStart = 0, yStart = 0;
     
     private int amoutOfUnconectedDoors = 0;
-    private int padding = 2;
+    [SerializeField] private int padding = 2;
 
    
 
@@ -44,8 +44,9 @@ public class MapManager : MonoBehaviour
         RandomAmountOfRoom(minRoom, maxRoom);
         MapLayout = new Room[amountOfRooms, amountOfRooms];
         GenerateRoomLayout(amountOfRooms / 2,amountOfRooms / 2);
-        PutGenerationOnMap();
         
+        PareDoors();
+        PutGenerationOnMap();
         
     }
 
@@ -80,9 +81,10 @@ public class MapManager : MonoBehaviour
             {
                 if (MapLayout[x,i] != null )
                 {
-                     Instantiate(MapLayout[x, i], new Vector3((xStart + (xSpace * x)),
+                    var temp = Instantiate(MapLayout[x, i], new Vector3((xStart + (xSpace * x)),
                          (yStart+(ySpace * i))), quaternion.identity, this.transform);
                      Debug.Log("x:"+ x+ " y: "+ i+ " Object: "+ MapLayout[x,i]+ "" );
+                     MapLayout[x, i] = temp;
                 }
 
             }
@@ -96,13 +98,96 @@ public class MapManager : MonoBehaviour
 
     private void PareDoors()
     {
-        for (int x = 0; x < MapLayout.Length; x++)
+        for (int y = 1; y < amountOfRooms; y++)
         {
-            for (int y = 0; y < MapLayout.Length; y++)
+            for (int x = 1; x < amountOfRooms; x++)
             {
+                Debug.Log("x: " +x+ " y: "+y);
                 if (MapLayout[x,y] != null)
                 {
-                    
+                    //North
+                    if (MapLayout[x,y].hasDirection[(int)Direction.North])
+                    {
+                        if (!MapLayout[x,y].DoorS[(int)Direction.North].isPaired)
+                        {
+                            if (MapLayout[x,y+1] == null)
+                            {
+                                MapLayout[x, y].DoorS[(int)Direction.North].gameObject.SetActive(false);
+                            }
+
+                            if (MapLayout[x,y + 1] != null)
+                            {
+                                if ( MapLayout[x,y+1].hasDirection[(int)Direction.South] )
+                                {
+                                    ConnectDoors(MapLayout[x, y].DoorS[(int)Direction.North],
+                                        MapLayout[x, y + 1].DoorS[(int)Direction.South]);
+                                }
+                            }
+
+                        }
+                    }
+                    //South
+                    if (MapLayout[x,y].hasDirection[(int)Direction.South])
+                    {
+                        if (!MapLayout[x,y].DoorS[(int)Direction.South].isPaired)
+                        {
+                            
+                            if (MapLayout[x,y - 1] == null)
+                            {
+                                MapLayout[x, y].DoorS[(int)Direction.South].gameObject.SetActive(false);
+                            }
+
+                            if (MapLayout[x,y - 1] != null)
+                            {
+                                if (MapLayout[x,y - 1].hasDirection[(int)Direction.North] )
+                                {
+                                    ConnectDoors(MapLayout[x, y].DoorS[(int)Direction.South],
+                                        MapLayout[x, y - 1].DoorS[(int)Direction.North]);
+                                }
+                            }
+
+                        }
+                    }
+                    //West
+                    if (MapLayout[x,y].hasDirection[(int)Direction.West])
+                    {
+                        if (!MapLayout[x,y].DoorS[(int)Direction.West].isPaired)
+                        {
+                            if (MapLayout[x + 1,y] == null)
+                            {
+                                MapLayout[x, y].DoorS[(int)Direction.West].gameObject.SetActive(false);
+                            }
+                            if (MapLayout[x + 1,y] != null)
+                            {
+                                if (  MapLayout[x + 1,y].hasDirection[(int)Direction.East] )
+                                {
+                                    ConnectDoors(MapLayout[x, y].DoorS[(int)Direction.West],
+                                        MapLayout[x + 1, y].DoorS[(int)Direction.East]);
+                                }
+                            }
+                        }
+                    }
+                    //East
+                    if (MapLayout[x,y].hasDirection[(int)Direction.East])
+                    {
+                        if (!MapLayout[x,y].DoorS[(int)Direction.East].isPaired)
+                        {
+                            if (MapLayout[x - 1,y] == null)
+                            {
+                                MapLayout[x, y].DoorS[(int)Direction.East].gameObject.SetActive(false);
+                            }
+
+                            if (MapLayout[x - 1,y] != null)
+                            {
+                                if (MapLayout[x - 1,y].hasDirection[(int)Direction.West] )
+                                {
+                                    ConnectDoors(MapLayout[x, y].DoorS[(int)Direction.East],
+                                        MapLayout[x - 1, y].DoorS[(int)Direction.West]);
+                                }
+                            }
+
+                        }
+                    }
                 }
             }
         }
@@ -162,65 +247,72 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        if (MapLayout[x, y + 1] != null)
+        if (y+1 <= 0 || y-1 > amountOfRooms )
         {
-            if (MapLayout[x, y+1].DoorS[(int)Direction.South])
+            if (MapLayout[x, y + 1] != null)
             {
-                for (var index = 0; index < tempRooms.Count; index++)
+                if (MapLayout[x, y+1].DoorS[(int)Direction.South])
                 {
-                    var room = tempRooms[index];
-                    if (!room.hasDirection[(int)Direction.South])
+                    for (var index = 0; index < tempRooms.Count; index++)
                     {
-                        tempRooms.Remove(room);
+                        var room = tempRooms[index];
+                        if (!room.hasDirection[(int)Direction.South])
+                        {
+                            tempRooms.Remove(room);
+                        }
                     }
                 }
             }
-        }
         
-        if (MapLayout[x, y - 1] != null)
-        {
-            if (MapLayout[x, y-1].DoorS[(int)Direction.North])
+            if (MapLayout[x, y - 1] != null)
             {
-                for (var index = 0; index < tempRooms.Count; index++)
+                if (MapLayout[x, y-1].DoorS[(int)Direction.North])
                 {
-                    var room = tempRooms[index];
-                    if (!room.hasDirection[(int)Direction.North])
+                    for (var index = 0; index < tempRooms.Count; index++)
                     {
-                        tempRooms.Remove(room);
+                        var room = tempRooms[index];
+                        if (!room.hasDirection[(int)Direction.North])
+                        {
+                            tempRooms.Remove(room);
+                        }
                     }
                 }
             }
         }
 
-        if (MapLayout[x+1, y] != null)
+        if (x+1 <= 0 || x-1 > amountOfRooms)
         {
-            if (MapLayout[x+1, y].DoorS[(int)Direction.West])
+            if (MapLayout[x+1, y] != null)
             {
-                for (var index = 0; index < tempRooms.Count; index++)
+                if (MapLayout[x+1, y].DoorS[(int)Direction.West])
                 {
-                    var room = tempRooms[index];
-                    if (!room.hasDirection[(int)Direction.West])
+                    for (var index = 0; index < tempRooms.Count; index++)
                     {
-                        tempRooms.Remove(room);
+                        var room = tempRooms[index];
+                        if (!room.hasDirection[(int)Direction.West])
+                        {
+                            tempRooms.Remove(room);
+                        }
+                    }
+                }
+            }
+
+            if (MapLayout[x-1,y] != null)
+            {
+                if ( MapLayout[x-1,y].DoorS[(int)Direction.East])
+                {
+                    for (var index = 0; index < tempRooms.Count; index++)
+                    {
+                        var room = tempRooms[index];
+                        if (!room.hasDirection[(int)Direction.East])
+                        {
+                            tempRooms.Remove(room);
+                        }
                     }
                 }
             }
         }
 
-        if (MapLayout[x-1,y] != null)
-        {
-            if ( MapLayout[x-1,y].DoorS[(int)Direction.East])
-            {
-                for (var index = 0; index < tempRooms.Count; index++)
-                {
-                    var room = tempRooms[index];
-                    if (!room.hasDirection[(int)Direction.East])
-                    {
-                        tempRooms.Remove(room);
-                    }
-                }
-            }
-        }
 
         
         if (x  < padding)
@@ -270,8 +362,8 @@ public class MapManager : MonoBehaviour
 
         resultingRooms = tempRooms;
         NumberOfRooms = tempRooms.Count;
-
-        return tempRooms[Random.Range(0, tempRooms.Count)];
+        
+        return  tempRooms[Random.Range(0, tempRooms.Count)];
         //Clean this 
          //Need to look at this if as its supposed to look if there is a room where its not supposed to be a room.
          // if (MapLayout[x,y+1] != null && direction != Direction.North || MapLayout[x,y-1] != null && direction != Direction.South ||
@@ -307,27 +399,7 @@ public class MapManager : MonoBehaviour
         // add check to see how manny generated doors there are and if they are filled or not
         // move to the next room and repete Check if room is already filled and dont generate new room. 
         //Recursion of this instead
-
-        if (OutsideArray(y + 1))
-        {
-            Debug.LogError("NUOB");
-            return;
-        }
-        if (OutsideArray(y - 1))
-        {
-            Debug.LogError("SUOB");
-            return;
-        }
-        if (OutsideArray(x + 1))
-        {
-            Debug.LogError("EUOB");
-            return;
-        }
-        if (OutsideArray(x - 1))
-        {
-            Debug.LogError("WUOB");
-            return;
-        }
+        
 
         Debug.Log("x: "+x+" y: "+y);
         
@@ -409,16 +481,6 @@ public class MapManager : MonoBehaviour
         
     }
 
-    bool OutsideArray(int goingTo)
-    {
-        if (goingTo < 1 || goingTo > amountOfRooms-2)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     public void ReGenerate()
     {
         foreach (var room in transform.GetComponentsInChildren<Room>())
@@ -428,6 +490,7 @@ public class MapManager : MonoBehaviour
 
         MapLayout = new Room[amountOfRooms, amountOfRooms];
         GenerateRoomLayout(amountOfRooms / 2,amountOfRooms / 2);
+        PareDoors();
         PutGenerationOnMap();
     }
 

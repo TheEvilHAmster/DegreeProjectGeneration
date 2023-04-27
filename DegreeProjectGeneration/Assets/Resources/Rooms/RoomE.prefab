@@ -636,10 +636,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 8058565601326838840, guid: 2b377feb66fb09545a8772d7cdf7f8c7, type: 3}
-  isPaired: 1
+  otherDoor: {fileID: 0}
+  isPaired: 0
   isOpen: 1
-  direction: 3
+  direction: 2
   MapExit: 0
 --- !u!1 &5196761061319497503
 GameObject:
