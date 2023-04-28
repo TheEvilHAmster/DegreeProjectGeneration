@@ -1106,7 +1106,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 3636714321349883482}
-  AmountOfRooms: 16
+  AmountOfRooms: 18
 --- !u!1 &9131014441455198624
 GameObject:
   m_ObjectHideFlags: 0

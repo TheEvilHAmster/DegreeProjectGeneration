@@ -256,7 +256,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 3456051149460544159}
-  AmountOfRooms: 32
+  AmountOfRooms: 36
 --- !u!1 &2166879557407854057
 GameObject:
   m_ObjectHideFlags: 0
@@ -1103,8 +1103,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 0}
-  isPaired: 0
+  otherDoor: {fileID: 8356560633488264456, guid: 97212e309cf17c74d971ff7c033fb78e, type: 3}
+  isPaired: 1
   isOpen: 1
   direction: 3
   MapExit: 0
@@ -1222,8 +1222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ac981d196e5f1438af82e4c4a20d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  otherDoor: {fileID: 0}
-  isPaired: 0
+  otherDoor: {fileID: 4799063789143785656, guid: 49529cbd49ba4344cb76b63cddb0a0a0, type: 3}
+  isPaired: 1
   isOpen: 1
   direction: 0
   MapExit: 0

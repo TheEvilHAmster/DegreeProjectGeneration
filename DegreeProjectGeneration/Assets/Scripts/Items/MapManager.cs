@@ -98,9 +98,9 @@ public class MapManager : MonoBehaviour
 
     private void PareDoors()
     {
-        for (int y = 1; y < amountOfRooms; y++)
+        for (int y = 1; y < amountOfRooms-1; y++)
         {
-            for (int x = 1; x < amountOfRooms; x++)
+            for (int x = 1; x < amountOfRooms-1; x++)
             {
                 Debug.Log("x: " +x+ " y: "+y);
                 if (MapLayout[x,y] != null)
@@ -247,7 +247,7 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        if (y+1 <= 0 || y-1 > amountOfRooms )
+        if (y-1 <= 0 || y+1 > amountOfRooms )
         {
             if (MapLayout[x, y + 1] != null)
             {
@@ -280,7 +280,7 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        if (x+1 <= 0 || x-1 > amountOfRooms)
+        if (x-1 <= 0 || x+1 > amountOfRooms)
         {
             if (MapLayout[x+1, y] != null)
             {
